@@ -18,4 +18,8 @@ Run the following command in your terminal:
 ```bash
 python hello.py
 > This line was added while practicing branching.
+## Project Management
+
+This project includes example Issues and a Demo Project Board to track progress.
+
 
