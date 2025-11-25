@@ -1,0 +1,166 @@
+import React from 'react';
+export default function HireFlowApp() {
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-xl font-semibold">HireFlow</h1>
+          <nav className="space-x-4 text-sm">
+            <a href="#/jobs" className="hover:underline">Jobs</a>
+            <a href="#/dashboard" className="hover:underline">Dashboard</a>
+            <a href="#/profile" className="hover:underline">Profile</a>
+          </nav>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto p-6">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="col-span-2">
+            <JobList />
+          </div>
+          <aside className="col-span-1 bg-white p-4 rounded-md shadow-sm">
+            <h3 className="font-semibold mb-3">Saved Searches</h3>
+            <ul className="space-y-2 text-sm">
+              <li className="text-slate-600">Data Scientist - Remote</li>
+              <li className="text-slate-600">Frontend Engineer - Cairo</li>
+            </ul>
+          </aside>
+        </section>
+      </main>
+
+      <footer className="mt-8 p-4 text-center text-sm text-slate-600">© HireFlow</footer>
+    </div>
+  );
+}
+
+function JobList() {
+  const jobs = [
+    { id: 1, title: 'Frontend Engineer', company: 'Acme', location: 'Cairo, Egypt', summary: 'React, TypeScript' },
+    { id: 2, title: 'Backend Engineer', company: 'Beta', location: 'Remote', summary: 'Node, Postgres' },
+  ];
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Open Roles</h2>
+        <div className="flex items-center gap-2">
+          <input className="border rounded px-3 py-2 text-sm" placeholder="Search jobs" aria-label="Search jobs" />
+          <button className="px-3 py-2 bg-sky-600 text-white rounded text-sm">Filter</button>
+        </div>
+      </div>
+
+      <ul className="space-y-4">
+        {jobs.map((j) => (
+          <li key={j.id} className="bg-white p-4 rounded shadow-sm">
+            <a href={`#/jobs/${j.id}`} className="block">
+              <h3 className="font-semibold text-lg">{j.title}</h3>
+              <p className="text-sm text-slate-600">{j.company} • {j.location}</p>
+              <p className="mt-2 text-sm">{j.summary}</p>
+            </a>
+            <div className="mt-3 flex gap-2">
+              <a href={`#/jobs/${j.id}`} className="px-3 py-2 border rounded text-sm">View</a>
+              <a href={`#/apply/quick/${j.id}`} className="px-3 py-2 bg-green-600 text-white rounded text-sm">Quick Apply</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+export function JobDetail({ id }) {
+  
+  const job = {
+    title: 'Frontend Engineer',
+    company: 'Acme',
+    location: 'Cairo, Egypt',
+    responsibilities: ['Build UI', 'Work with designers'],
+    specs: ['3+ years React', 'TypeScript'],
+  };
+
+  return (
+    <div className="bg-white p-6 rounded shadow-sm">
+      <h2 className="text-2xl font-bold">{job.title}</h2>
+      <p className="text-sm text-slate-600">{job.company} • {job.location}</p>
+
+      <section className="mt-4">
+        <h3 className="font-semibold">Responsibilities</h3>
+        <ul className="list-disc pl-6 mt-2">
+          {job.responsibilities.map((r, i) => <li key={i}>{r}</li>)}
+        </ul>
+      </section>
+
+      <section className="mt-4">
+        <h3 className="font-semibold">Requirements</h3>
+        <ul className="list-disc pl-6 mt-2">
+          {job.specs.map((s, i) => <li key={i}>{s}</li>)}
+        </ul>
+      </section>
+
+      <div className="mt-6 flex gap-3">
+        <a href={`#/apply/full/${id}`} className="px-4 py-2 bg-sky-600 text-white rounded">Apply</a>
+        <a href={`#/apply/quick/${id}`} className="px-4 py-2 border rounded">Quick Apply</a>
+      </div>
+    </div>
+  );
+}
+export function QuickApply({ jobId }) {
+  return (
+    <div className="bg-white p-6 rounded shadow-sm max-w-2xl">
+      <h3 className="font-semibold">Quick Apply</h3>
+      <p className="text-sm text-slate-600 mt-1">Apply with LinkedIn or upload resume</p>
+
+      <div className="mt-4 space-y-3">
+        <button className="w-full px-4 py-2 border rounded">Connect LinkedIn</button>
+        <label className="block">
+          <span className="sr-only">Upload resume</span>
+          <input type="file" accept="application/pdf,application/msword" />
+        </label>
+        <button className="px-4 py-2 bg-green-600 text-white rounded">Submit</button>
+      </div>
+    </div>
+  );
+}
+export function RecruiterDashboard() {
+  return (
+    <div className="bg-white p-6 rounded shadow-sm">
+      <h2 className="text-xl font-bold">Recruiter Dashboard</h2>
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard title="Open Roles" value="12" />
+        <StatCard title="Applicants this week" value="86" />
+        <StatCard title="Avg time-to-hire" value="27 days" />
+      </div>
+
+      <section className="mt-6">
+        <h3 className="font-semibold">Pipeline (Kanban)</h3>
+        <div className="mt-3 grid grid-cols-3 gap-4">
+          <PipelineColumn title="Applied" count={24} />
+          <PipelineColumn title="Phone Screen" count={8} />
+          <PipelineColumn title="Interview" count={3} />
+        </div>
+      </section>
+    </div>
+  );
+}
+function StatCard({ title, value }) {
+  return (
+    <div className="bg-slate-50 p-4 rounded">
+      <div className="text-sm text-slate-600">{title}</div>
+      <div className="text-2xl font-semibold">{value}</div>
+    </div>
+  );
+}
+
+function PipelineColumn({ title, count }) {
+  return (
+    <div className="bg-white p-3 rounded shadow-sm">
+      <div className="flex items-center justify-between">
+        <div className="font-semibold">{title}</div>
+        <div className="text-sm text-slate-500">{count}</div>
+      </div>
+      <div className="mt-3 space-y-3">
+        <div className="p-2 border rounded">Candidate A</div>
+        <div className="p-2 border rounded">Candidate B</div>
+      </div>
+    </div>
+  );
+}
